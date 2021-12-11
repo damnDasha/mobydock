@@ -40,3 +40,25 @@
 # https://github.com/BretFisher/node-docker-good-defaults
 
 FROM debian:stretch-slim
+
+
+
+
+
+RUN apk add --update tini \
+	&& \
+	mkdir -p /usr/src/app \
+  && run npm install\
+	&& npm cache clean --force\
+	&& rm -rf /var/lib/apt/lists/*
+
+WORKDIR /usr/src/app
+
+COPY package.json index.js
+
+EXPOSE 80 443 8080
+# do i need 8080?? yes
+
+CMD ["/sbin/tini -- node ./bin/www"]
+
+
